@@ -1,4 +1,5 @@
 using library.Data;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
