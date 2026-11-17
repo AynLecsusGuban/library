@@ -1,9 +1,10 @@
 using library.Data;
-using Npgsql;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<NoteRepository>();
 
 // Database: read the connection string from User Secrets and create one shared data source.
 var connectionString = builder.Configuration.GetConnectionString("Library");
