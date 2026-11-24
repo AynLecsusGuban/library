@@ -1,0 +1,40 @@
+﻿@model MemberDetails
+@{
+    ViewData["Title"] = Model.Member.FullName;
+}
+ 
+<h1 class="mb-1">@Model.Member.FullName</h1>
+<p class="text-muted">@Model.Member.MemberType · @(Model.Member.Email ?? "no email")</p>
+ 
+<h2 class="h5 mt-4">Loans</h2>
+@if (Model.Loans.Count == 0)
+{
+    <p>This member has never borrowed a book.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Book</th>
+                <th>Loaned</th>
+                <th>Returned</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var loan in Model.Loans)
+            {
+                <tr>
+                    <td>@loan.BookTitle</td>
+                    <td>@(loan.LoanedOn.ToString("yyyy-MM-dd"))</td>
+                    <td>@(loan.ReturnedOn?.ToString("yyyy-MM-dd") ?? "—")</td>
+                    <td>@loan.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+ 
+<a asp-action="Index" class="btn btn-link px-0">Back to members</a>
+
