@@ -24,18 +24,24 @@ public class MemberRepository
         };
     }
 
+    // READ: every member, with how many books each has out now.
     public async Task<List<Member>> GetAllAsync()
     {
-        const string sql = "SELECT member_id, full_name, email, member_type FROM lending.member ORDER BY full_name;";
+        const string sql =
+    "SELECT m.member_id, m.full_name, m.email, m.member_type, COUNT(l.loan_id) " +
+    "FROM lending.member m " +
+    "LEFT JOIN lending.loan l ON l.member_id = m.member_id AND l.returned_on IS NULL " +
+    "GROUP BY m.member_id " +
+    "ORDER BY m.full_name;";
 
         var members = new List<Member>();
-
         await using var command = _dataSource.CreateCommand(sql);
         await using var reader = await command.ExecuteReaderAsync();
-
         while (await reader.ReadAsync())
         {
-            members.Add(ReadMember(reader));
+            var member = ReadMember(reader);
+            member.OpenLoans = reader.GetInt64(4);
+            members.Add(member);
         }
 
         return members;
