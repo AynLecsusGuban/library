@@ -32,7 +32,12 @@
                 <td>@(loan.LoanedOn.AddDays(loan.DaysAllowed).ToString("yyyy-MM-dd"))</td>
                 <td><span class="badge @(loan.Status == "Overdue" ? "text-bg-danger" : loan.Status == "Out" ? "text-bg-warning" : "text-bg-secondary")">@loan.Status</span></td>
                 <td class="text-end">
-                    @* Task 9 puts the Return button here *@
+                    @if (loan.ReturnedOn == null)
+                    {
+                        <form asp-action="Return" asp-route-id="@loan.LoanId" method="post">
+                            <button type="submit" class="btn btn-sm btn-outline-success">Return</button>
+                        </form>
+                    }
                 </td>
             </tr>
         }
